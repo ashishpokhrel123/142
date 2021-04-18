@@ -13,4 +13,9 @@ class MemberDept extends Model
     protected $guarded = [];
 
     use HasFactory;
+
+    public function member()
+    {
+         return $this->hasMany(Member::class);
+    }
 }

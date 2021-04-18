@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Categories extends Model
 {
     protected $table = "categories";
+    
 
     protected $guarded = []; 
 
@@ -16,6 +17,8 @@ class Categories extends Model
 
     public function service()
     {
-        return $this->hasMany(Service::class);
+        return $this->hasMany(Service::class,'category_id');
     }
+
+    
 }

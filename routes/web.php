@@ -50,7 +50,8 @@ use App\Models\Admin\Categories;
             $services = Service::all()->where('status',0);
             $cat      = Categories::all()->where('status',0);
             return view('frontend.service.index',['services'=>$services,'cat'=>$cat]); 
-        });  
+        }); 
+     Route::get('/viewservice', [ServiceController::class, 'treeView']); 
 
 //board route
     Route::get('/board', function () 
@@ -90,7 +91,7 @@ use App\Models\Admin\Categories;
     Route::post('/addService',[ServiceController::class,'add']); 
     Route::get('/deleteService/{id}',[ServiceController::class,'destroy']);  
     Route::get('/deleteCat/{id}',[ServiceController::class,'destroyCat']);
-    Route::get('/viewservice', [ServiceController::class, 'viewService']);
+   
 
 //admin member route
     Route::get('/admin/member',[MemberController::class,'index']);

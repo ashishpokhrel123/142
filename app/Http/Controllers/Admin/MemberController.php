@@ -13,6 +13,7 @@ class MemberController extends Controller
 
         $members = Member::all();
         $all_dept = MemberDept::all();
+        
         return view('admin.member.index',['members'=>$members,'all_dept'=>$all_dept]);
     }
 

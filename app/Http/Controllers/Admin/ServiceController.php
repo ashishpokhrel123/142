@@ -16,6 +16,7 @@ class ServiceController extends Controller
     {
 
         $all_data = Categories::all();
+
         return view('admin.service.index', compact('all_data'));
         
         
@@ -26,13 +27,14 @@ class ServiceController extends Controller
     {
         $category = Categories::with('service')->get();
         dd($category);
+        
         return view('service.index', compact('category'));
     }
 
 //create service
 public function create()
     {
-        $all_cat = categories::all();
+        $all_cat = Categories::all();
         return view('admin.service.create',['all_cat'=>$all_cat]);
     }
 
@@ -84,16 +86,59 @@ public function add(Request $request)
 
 
         
-       
-        $service = $request->validate([
+        $service = new Service();
+        /*$service = $request->validate([
                                     
                                     'name' => 'required|string|unique:services',
-                                    'description' => 'required|string',
+                                    'cat_id' => 'required|string',
                                     'status' => 'required',
-        ]);
-        Categories::find($request->cat_id)->service()->create($service);
+                                    'cat_id' => 'required'
+        ]);*/
+        $service->name = $request->name;
+        $service->description = $request->description;
+        $service->status = $request->status;
+        $service->category_id = $request->cat_id;
+        $service->save();
         // $service = Service::create($service);
         return redirect('admin/service')->with('success','Service Created Success');
     }
 
+    /* tree view */
+
+    public function  treeView()
+    {
+        $cat = Categories::with('service')->get();
+       
+        $tree = '<ul id="browser" class="filetree"><li class="tree-view"></li>';
+        foreach($cat as $category){
+             $tree .='<li class="tree-view closed"<a class="tree-name">'.$category->name.'</a>';
+             if(!empty($category->service)) {
+                $tree .=$this->childView($category);
+        }
+    }
+
+     $tree .='<ul>';
+    dd($tree);
+     
+    return view('service.index', compact('tree'));
+
 }
+
+public function childView($category){
+    $html = '<ul>';
+    foreach($category->service as $svc){
+        if(!empty($svc->service)){
+            $html .='<li class="tree-view closed"><a class="tree-name">' .$svc->name.'</a>';
+                      $html.= $this->childView($svc);
+
+        } else {
+            $html .='<li class="tree-view"><a class="tree-name">'.$svc->name.'</a>';                                 
+                        $html .="</li>";
+        }
+        
+    }
+    $html .="</ul>";
+    return $html;
+}
+}
+
