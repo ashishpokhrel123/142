@@ -22,7 +22,7 @@ class BoardController extends Controller
         }
     }
      $tree .='<ul>';
-    dd($tree);
+
      
     //return view('service.index', compact('tree'));
 }
